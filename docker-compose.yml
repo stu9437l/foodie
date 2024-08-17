@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Change this to a secure root password
+      MYSQL_DATABASE: foodie # Name of the database to create
+    ports:
+      - '3306:3306' # Map port 3306 of the container to port 3306 on the host
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist MySQL data
+
+volumes:
+  mysql_data:

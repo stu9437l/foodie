@@ -18,16 +18,28 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@mantine/charts": "^7.11.2",
     "@mantine/core": "7.11.2",
     "@mantine/hooks": "7.11.2",
     "@next/bundle-analyzer": "^14.2.4",
+    "@prisma/client": "^5.17.0",
     "@tabler/icons-react": "^3.6.0",
+    "@types/crypto-js": "^4.2.2",
+    "bcrypt": "^5.1.1",
+    "crypto-js": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
     "next": "14.2.4",
+    "nodemailer": "^6.9.14",
+    "prisma": "^5.17.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "recharts": "2"
+    "recharts": "2",
+    "xss": "^1.0.15",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
@@ -41,8 +53,11 @@
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
+    "@types/bcrypt": "^5",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.8",
+    "@types/jsonwebtoken": "^9",
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^6",
     "@types/react": "18.3.3",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
@@ -68,7 +83,8 @@
     "stylelint": "^16.6.1",
     "stylelint-config-standard-scss": "^13.1.0",
     "ts-jest": "^29.1.5",
-    "typescript": "5.5.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   },
   "packageManager": "yarn@4.3.1"
 }
