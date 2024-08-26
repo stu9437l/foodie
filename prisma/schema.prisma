@@ -56,13 +56,14 @@ model Department {
   id          Int         @id @default(autoincrement())
   name        String
   employees   Employee[]  // A department can have many employees
-
+  employeeFood EmployeeFood[]
   @@map("departments") // Maps to a specific table name in MySQL
 }
 
 model Position {
   id          Int         @id @default(autoincrement())
   name        String
+
   employees   Employee[]  // A position can have many employees
 
   @@map("positions") // Maps to a specific table name in MySQL
@@ -72,6 +73,8 @@ model EmployeeFood {
   id Int @id @default(autoincrement())
   employee Employee @relation(fields: [employeeId], references:[id])
   employeeId Int 
+  department  Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
   food Food @relation(fields: [foodId], references:[id])
   foodId  Int 
   remarks String?
@@ -88,8 +91,18 @@ model Food{
   name String
   employeeFood EmployeeFood[]
   employee Employee[]
-
   @@map("food_list")
+}
+
+model Vendor {
+  id Int @id @default(autoincrement())
+  name String
+  phone String
+  email String
+  address String
+  officeHour String
+
+  @@map("vendor_infos")
 }
 
 enum RoleEnum {

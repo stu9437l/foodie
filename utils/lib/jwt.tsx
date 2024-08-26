@@ -9,7 +9,7 @@ const generateJwt = async (data: any) => {
   return token;
 };
 
-const verifyJwtToken = async (token: string) => {
+const verifyJwtToken =  (token: string) => {
   const user = jwt.verify(token, SECREKEKEY);
   return user;
 };

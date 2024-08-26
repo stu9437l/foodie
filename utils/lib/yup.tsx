@@ -31,13 +31,30 @@ const employeeFoodValidation = Yup.object({
     .required('Employee ID is required')
     .positive('Employee ID must be a positive number')
     .integer('Employee ID must be an integer'),
-
   foodId: Yup.number()
     .required('Food ID is required')
     .positive('Food ID must be a positive number')
     .integer('Food ID must be an integer'),
 
   remarks: Yup.string().nullable().max(255, 'Remarks cannot be longer than 255 characters'),
+});
+
+const vendorInfoValidation = Yup.object({
+  name: Yup.string()
+    .required('Name is required')
+    .min(3, 'Name must be at least 3 characters long')
+    .max(100, 'Name cannot be more than 100 characters'),
+  address: Yup.string().required('Address is required'),
+  phone: Yup.string()
+    .required('Phone number is required')
+    .matches(/^\d+$/, 'Phone number must be digits only')
+    .min(10, 'Phone number must be at least 10 digits long')
+    .max(15, 'Phone number cannot be more than 15 digits long'),
+  email: Yup.string().email('Invalid email format').required('Email is required'),
+  officeHour: Yup.string()
+    .required('Office hours is required')
+    .min(3, 'Office hours must be at least 3 characters long')
+    .max(100, 'Office hours cannot be more than 100 characters'),
 });
 
 const employeeValidation = Yup.object({
@@ -77,6 +94,12 @@ const employeeValidation = Yup.object({
     .integer('Food ID must be an integer'),
 });
 
+const loginValidation = () =>
+  Yup.object().shape({
+    password: passwordValidation,
+    email: Yup.string().required(),
+  });
+
 export {
   positionValidation,
   foodValidation,
@@ -84,4 +107,6 @@ export {
   departmentValidation,
   employeeFoodValidation,
   passwordValidation,
+  loginValidation,
+  vendorInfoValidation,
 };

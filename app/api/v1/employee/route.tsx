@@ -25,17 +25,16 @@ const validateEmployee = async (data: any) => {
   }
 };
 
-const findEmployeeByEmail = async (email: string) => {
+const findEmployeeByEmailAndEmpID = async (email: string, empId: number) => {
   const existingEmployee = await prisma.employee.findFirst({
     where: {
-      email: email,
+      OR: [{ email: email }, { empId: empId }],
     },
   });
-  console.log({ existingEmployee });
   if (existingEmployee) {
     return NextResponse.json(
       {
-        message: `${email} is already exist`,
+        message: `Emloyee is already exist. Please check email and employee id duplication.`,
       },
       {
         status: 400,
@@ -83,7 +82,7 @@ export async function POST(request: Request, response: Response) {
     departmentId = xss(departmentId);
     foodId = xss(foodId);
 
-    const existingEmployee = await findEmployeeByEmail(email);
+    const existingEmployee = await findEmployeeByEmailAndEmpID(email, empId);
     if (existingEmployee) return existingEmployee;
 
     const newUser = await prisma.employee.create({
@@ -117,19 +116,7 @@ export async function GET(request: Request) {
   try {
     const isAuthError = validateAuthAndAuthorization(request, ['ADMIN']);
     if (isAuthError) return isAuthError;
-    const employees = await prisma.employee.findMany({
-      select: {
-        name: true,
-        email: true,
-        role: true,
-        image: true,
-        phone: true,
-        address: true,
-        departmentId: true,
-        positionId: true,
-        foodId: true,
-      },
-    });
+    const employees = await prisma.employee.findMany();
     return NextResponse.json(
       {
         message: 'All employee',

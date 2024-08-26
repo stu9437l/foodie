@@ -28,7 +28,7 @@ const findDepartmentByName = async (name: string) => {
   }
 };
 
-const findDepartmentById = async (id: number) => {
+export const findDepartmentById = async (id: number) => {
   const existingDepartment = await prisma.department.findFirst({
     where: {
       id: Number(id),
@@ -54,7 +54,7 @@ const validateDepartment = async (data: any) => {
     return NextResponse.json(
       {
         message: 'Validation Error',
-        error: err.errros,
+        error: err.erros,
       },
       {
         status: 400,
@@ -101,10 +101,51 @@ export async function GET(request: Request) {
   try {
     const isAuthError = validateAuthAndAuthorization(request, ['ADMIN']);
     if (isAuthError) return isAuthError;
-    const departments = await prisma.department.findMany();
+    const { url } = request;
+    const urlObject = new URL(url);
+    const { searchParams } = urlObject;
+    const departmentQuery = searchParams.get('department');
+    const fromDateQuery = searchParams.get('fromDate');
+    const toDateQuery = searchParams.get('toDate');
+
+    console.log({ fromDateQuery, toDateQuery });
+
+    // const fromDate = fromDateQuery ? new Date('2024-08-26T00:00:00.000Z') : undefined;
+    // const toDate = toDateQuery ? new Date('2024-08-26T23:59:59.999Z') : undefined;
+
+    const fromDate = fromDateQuery
+      ? new Date(new Date(fromDateQuery).setUTCHours(0, 0, 0, 0))
+      : undefined;
+    const toDate = toDateQuery
+      ? new Date(new Date(toDateQuery).setUTCHours(23, 59, 59, 999))
+      : undefined;
+
+    console.log({ url, fromDate, toDate, departmentQuery });
+
+    let departments = [];
+    if (departmentQuery) {
+      departments = await prisma.department.findMany({
+        where: {
+          name: departmentQuery,
+        },
+        include: {
+          employeeFood: {
+            where: {
+              createdAt: {
+                ...(fromDate && { gte: fromDate }),
+                ...(toDate && { lt: toDate }),
+              },
+            },
+          },
+        },
+      });
+    } else {
+      departments = await prisma.department.findMany();
+    }
+
     return NextResponse.json(
       {
-        message: 'All Departments',
+        message: 'Successfully fetched department',
         data: departments,
       },
       {

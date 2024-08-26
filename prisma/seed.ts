@@ -35,17 +35,34 @@ async function main() {
     },
   });
 
+  const employee: any = {
+    name: 'user',
+    email: 'user@gmail.com',
+    role: 'USER',
+    phone: '9800123456',
+    address: 'kathamandu',
+    empId: 1,
+    password: '$2a$10$eqXt.8kKM9kFCDT6oLOfP.zbZtJ.6JVB5sTEX6Q64ujiL6XQs0Lyu', // emp id
+    positionId: 1,
+    departmentId: 1,
+    foodId: 1,
+  };
+
+  await prisma.employee.create({
+    data: employee,
+  });
+
   const user: any = {
-    name: 'Alice Smith',
-    email: 'alice.smith@example.com',
-    password: '$2b$10$yenH1tN5TnaXN3kw5jJLteFXJA89ZJDvOlnPIlcOVchkjgT4cO0TC',
+    name: 'admin',
+    email: 'admin@gmail.com',
+    password: '$2a$10$qOsegDdjd6V2Rr7SxzQlEucrZf9BnHIsUgIU6B/Y3dzRdvVHMhAg.', //password
     role: 'ADMIN',
     createdAt: new Date(),
     updatedAt: new Date(),
     isActive: true,
     profilePic: 'https://example.com/alice.jpg',
     bio: 'Administrator',
-    phoneNumber: '123-456-7890',
+    phoneNumber: '9801234567',
   };
 
   await prisma.user.create({

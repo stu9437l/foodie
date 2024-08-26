@@ -28,6 +28,12 @@
         color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
     } */
 }
+.buttonLink{
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+    padding-left: var(--mantine-spacing-md);
+    margin-left: var(--mantine-spacing-xl);
+    border-left: none;
+}
 .activeLink{
         background-color: var(--mantine-color-blue-light);
 }

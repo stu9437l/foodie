@@ -6,6 +6,7 @@ import xss from 'xss';
 import { errorHandler } from '@/backend/errorHandler';
 import { findEmployeeById } from '../employee/route';
 import { findFoodById } from '../food/route';
+import { findDepartmentById } from '../department/route';
 
 const validateByCreatedDate = async (employeeId: number) => {
   const existingEmployeeFood: any = await prisma.employee.findFirst({
@@ -65,7 +66,7 @@ const validateEmployeeFood = async (data: any) => {
     return NextResponse.json(
       {
         message: 'Validation Error',
-        error: err.errros,
+        error: err.errors,
       },
       {
         status: 400,
@@ -82,38 +83,49 @@ export async function POST(request: Request) {
     const body = await request.json();
     const isValidate = await validateEmployeeFood(body);
     if (isValidate) return isValidate;
-    let { employeeId, foodId, remarks, createdAt, updatedAt } = body;
+    let { employeeId, foodId, remarks, departmentId, createdAt, updatedAt } = body;
     employeeId = xss(employeeId);
     foodId = xss(foodId);
     remarks = xss(remarks);
 
     const existingEmployee = await findEmployeeById(employeeId);
+    console.log({ existingEmployee });
     if (existingEmployee) return existingEmployee;
 
-    const existingFood = await findFoodById(foodId);
-    if (existingFood) return existingFood;
-    const validateEmployeeFoodbyDate = await validateByCreatedDate(employeeId);
-    if (validateEmployeeFoodbyDate) return validateEmployeeFoodbyDate;
-
-    const newEmployeeFood = await prisma.employeeFood.create({
-      data: {
-        employeeId: Number(employeeId),
-        foodId: Number(foodId),
-        remarks,
-        createdAt,
-        updatedAt,
+    const employee = await prisma.employee.findFirst({
+      where: {
+        id: Number(employeeId),
       },
     });
-    return NextResponse.json(
-      {
-        message: 'New Employee food is created successful',
-        data: newEmployeeFood,
-      },
-      {
-        status: 201,
-        statusText: 'Ok',
-      }
-    );
+
+    if (employee) {
+      const existingFood = await findFoodById(foodId);
+      if (existingFood) return existingFood;
+
+      const validateEmployeeFoodbyDate = await validateByCreatedDate(employeeId);
+      if (validateEmployeeFoodbyDate) return validateEmployeeFoodbyDate;
+
+      const newEmployeeFood = await prisma.employeeFood.create({
+        data: {
+          employeeId: Number(employeeId),
+          foodId: Number(foodId),
+          departmentId: Number(employee?.departmentId),
+          remarks,
+          createdAt,
+          updatedAt,
+        },
+      });
+      return NextResponse.json(
+        {
+          message: 'New Employee food is created successful',
+          data: newEmployeeFood,
+        },
+        {
+          status: 201,
+          statusText: 'Ok',
+        }
+      );
+    }
   } catch (err) {
     console.log({ err });
     return errorHandler(500, 'Internal Server Error');
@@ -121,6 +133,7 @@ export async function POST(request: Request) {
 }
 export async function GET(request: Request) {
   try {
+    console.log({ url: request.url });
     const isAuthError = validateAuthAndAuthorization(request, ['ADMIN']);
     if (isAuthError) return isAuthError;
     const employeeFoods = await prisma.employeeFood.findMany();

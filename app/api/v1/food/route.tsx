@@ -54,7 +54,7 @@ const validateFood = async (data: any) => {
     return NextResponse.json(
       {
         message: 'Validation Error',
-        error: err.errros,
+        error: err.erros,
       },
       {
         status: 400,

@@ -1,30 +1,21 @@
 'use client';
-import {
-  HoverCard,
-  Group,
-  Button,
-  UnstyledButton,
-  Text,
-  SimpleGrid,
-  ThemeIcon,
-  Anchor,
-  Divider,
-  Center,
-  Box,
-  Burger,
-  Drawer,
-  Collapse,
-  ScrollArea,
-  rem,
-  useMantineTheme,
-  Title,
-} from '@mantine/core';
+import { Group, Button, Text, Box, Burger } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './HeaderMegaMenu.module.css';
 import { ActionToggle } from '../ActionToggle';
+import { useRouter } from 'next/navigation';
 
 export function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const res = await fetch('http://localhost:3000/api/v1/logout', {
+      method: 'POST',
+    });
+    console.log({ res: res.formData });
+    router.replace('login');
+  };
 
   return (
     <Box>
@@ -35,7 +26,7 @@ export function Header() {
             {/* <ColorSchemeToggle /> */}
 
             {/* <Button variant="default">Log in</Button> */}
-            <Button>Logout</Button>
+            <Button onClick={handleLogout}>Logout</Button>
             <ActionToggle />
           </Group>
 

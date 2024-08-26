@@ -1,8 +1,8 @@
-
 import { isAuthenticate, isAuthorized } from '@/backend/authentication';
 import { errorHandler } from '@/backend/errorHandler';
 import prisma from '@/prisma/db';
 import { positionValidation } from '@/utils/lib/yup';
+import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 import xss from 'xss';
 

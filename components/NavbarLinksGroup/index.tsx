@@ -15,6 +15,7 @@ import classes from './NavbarNested.module.css';
 import { LinksGroup } from './NavbarLinksGroup';
 import { Logo } from '../Logo';
 import { UserButton } from '../UserButton/UserButton';
+import { Label } from 'recharts';
 
 const mockdata = [
   { label: 'Dashboard', icon: IconGauge },
@@ -29,6 +30,7 @@ const mockdata = [
       { label: 'Finance', link: '/' },
       { label: 'Business', link: '/' },
       { label: 'Hardware', link: '/' },
+      { label: 'Create New' },
     ],
   },
   //   {
@@ -47,7 +49,7 @@ const mockdata = [
     icon: IconLock,
     links: [{ label: 'Change password', link: '/dashboard/change-password' }],
   },
-  { label: 'Vendor', icon: IconPresentationAnalytics },
+  { label: 'Vendor', link: '/dashboard/vendor', icon: IconPresentationAnalytics },
 ];
 
 const SideBar = () => {

@@ -5,7 +5,6 @@ const Page = () => {
   return (
     <div>
       <StatsGrid />
-    
       <BarDiagram />
     </div>
   );

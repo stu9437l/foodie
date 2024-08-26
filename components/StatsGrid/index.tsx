@@ -16,32 +16,43 @@ const icons = {
   coin: IconCoin,
 };
 
-const data = [
-  { title: 'Revenue', icon: 'receipt', value: '13,456', diff: 34 },
-  { title: 'Profit', icon: 'coin', value: '4,145', diff: -13 },
-  { title: 'Coupons usage', icon: 'discount', value: '745', diff: 18 },
-  { title: 'New customers', icon: 'user', value: '188', diff: -30 },
-] as const;
+export async function StatsGrid() {
+  const res = await fetch('http://localhost:3000/api/v1/food/category');
+  const { data: foodCategoryList } = await res.json();
+  console.log({ foodCategoryList });
 
-export function StatsGrid() {
-  const stats = data.map((stat) => {
-    const Icon = icons[stat.icon];
-    const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
+  // const data = [
+  //   { title: 'Revenue', icon: 'receipt', value: '13,456', diff: 34 },
+  //   { title: 'Profit', icon: 'coin', value: '4,145', diff: -13 },
+  //   { title: 'Coupons usage', icon: 'discount', value: '745', diff: 18 },
+  //   { title: 'New customers', icon: 'user', value: '188', diff: -30 },
+  // ] as const;
 
+  const stats = foodCategoryList.map((stat: any, index: number) => {
+    const setICons = ['receipt', 'discount', 'receipt', 'receipt', 'receipt', 'receipt'];
+
+    stat.icon = setICons[index];
+    const Icon: any = icons[stat.icon];
+    // const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
     return (
-      <Paper withBorder p="md" radius="md" key={stat.title}>
+      <Paper withBorder p="md" radius="md" key={stat.name}>
         <Group justify="space-between">
-          <Text size="xs" c="dimmed" className={classes.title}>
-            {stat.title}
+          <Text size="xs" c="dimmed" className={classes.name}>
+            {stat.name}
           </Text>
           <Icon className={classes.icon} size="1.4rem" stroke={1.5} />
         </Group>
 
         <Group align="flex-end" gap="xs" mt={25}>
-          <Text className={classes.value}>{stat.value}</Text>
-          <Text c={stat.diff > 0 ? 'teal' : 'red'} fz="sm" fw={500} className={classes.diff}>
-            <span>{stat.diff}%</span>
-            <DiffIcon size="1rem" stroke={1.5} />
+          <Text className={classes.value}>{stat._count?.employeeFood}</Text>
+          <Text
+            c={stat._count?.employeeFood > 0 ? 'teal' : 'red'}
+            fz="sm"
+            fw={500}
+            className={classes.count}
+          >
+            <span>{stat.count}</span>
+            {/* <countIcon size="1rem" stroke={1.5} /> */}
           </Text>
         </Group>
 
@@ -51,5 +62,5 @@ export function StatsGrid() {
       </Paper>
     );
   });
-  return <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>{stats}</SimpleGrid>;
+  return <SimpleGrid cols={{ base: 2, xs: 3, md: 6 }}>{stats}</SimpleGrid>;
 }

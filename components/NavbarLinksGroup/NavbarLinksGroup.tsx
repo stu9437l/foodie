@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem } from '@mantine/core';
+import { Group, Box, Collapse, ThemeIcon, Text, UnstyledButton, rem, Button } from '@mantine/core';
 import { IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
 import classes from './NavbarLinksGroup.module.css';
 import { useParams, usePathname, useRouter } from 'next/navigation';
@@ -16,6 +16,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
   const pathname = usePathname().toString().replace('/', '').toLowerCase();
   const activeRoute = pathname === label.toLowerCase();
   const { push } = useRouter();
+  console.log({ pathname });
 
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
@@ -67,25 +68,35 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
           )}
         </Group>
       </UnstyledButton>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {hasLinks ? (
+        <Collapse in={opened}>
+          {label === 'Departments' && (
+            <Button className={classes.buttonLink} variant="light">
+              + New Department
+            </Button>
+          )}
+
+          {items}
+        </Collapse>
+      ) : null}
     </>
   );
 }
 
-const mockdata = {
-  label: 'Releases',
-  icon: IconCalendarStats,
-  links: [
-    { label: 'Upcoming releases', link: '/' },
-    { label: 'Previous releases', link: '/' },
-    { label: 'Releases schedule', link: '/' },
-  ],
-};
+// const mockdata = {
+//   label: 'Releases',
+//   icon: IconCalendarStats,
+//   links: [
+//     { label: 'Upcoming releases', link: '/' },
+//     { label: 'Previous releases', link: '/' },
+//     { label: 'Releases schedule', link: '/' },
+//   ],
+// };
 
-export function NavbarLinksGroup() {
-  return (
-    <Box mih={220} p="md">
-      <LinksGroup {...mockdata} />
-    </Box>
-  );
-}
+// export function NavbarLinksGroup() {
+//   return (
+//     <Box mih={220} p="md">
+//       <LinksGroup {...mockdata} />
+//     </Box>
+//   );
+// }

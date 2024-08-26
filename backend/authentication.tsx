@@ -1,18 +1,15 @@
 import { cookies } from 'next/headers';
 import { parseJwt } from '../utils';
-import { getCookie } from '../utils/lib/cookie';
-import { NextResponse } from 'next/server';
 import { errorHandler } from './errorHandler';
 
 interface AuthProps extends Request {
   user?: any;
 }
-const isAuthenticate = (request: AuthProps) => {
-  console.log({ request });
-  try {
-    const token = cookies().get('token');
-    console.log({ token: !token, tokenv: !!token });
 
+const isAuthenticate = (request: AuthProps) => {
+  try {
+    const token: any = cookies().get(`token`);
+    console.log({ token });
     if (!token) {
       return errorHandler(401, 'Unauthorized');
     }
